@@ -39,7 +39,7 @@ async def is_admin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.effective_message.reply_text(
-        "Привет! Я бот-модератор 🤖\n\n"
+        "Привет! Я бот-модератор. Мой создатель Отабек (@TemaBruno) 🤖\n\n"
         "/del — удалить сообщение (ответом на него)\n"
         "/ban — заблокировать пользователя\n"
         "/mute 10 — мут на 10 минут\n"
