@@ -1,4 +1,9 @@
-import os
+import sqlite3
+
+conn = sqlite3.connect('users.db')
+cursor = conn.cursor()
+cursor.execute('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY)')
+conn.commit() import os
 import time
 import logging
 from collections import defaultdict, deque
@@ -37,15 +42,23 @@ async def is_admin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
         return False
 
 
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE): 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.effective_message.reply_text(
-        "Привет! Я бот-модератор. Мой создатель Отабек (@TemaBruno) 🤖\n\n"
-        "/del — удалить сообщение (ответом на него)\n"
-        "/ban — заблокировать пользователя\n"
-        "/mute 10 — мут на 10 минут\n"
-        "/unmute — снять мут\n\n"
-        "Защита от частого спама включена."
-    )
+    cursor.execute('INSERT OR IGNORE INTO users (id) VALUES (?)', (update.effective_user.id,))
+    conn.commit()
+    cursor.execute('SELECT COUNT(*) FROM users')
+    count = cursor.fetchone()[0]
+    
+    text = (f"Привет! Я бот-модератор. "
+            f"Мой создатель Отабек (@TemaBruno) 🐶\n\n"
+            f"/del — удалить сообщение (ответом на него)\n"
+            f"/ban — заблокировать пользователя\n"
+            f"/mute 10 — мут на 10 минут\n"
+            f"/unmute — снять мут\n\n"
+            f"Защита от частого спама включена.\n\n"
+            f"Всего пользователей: {count}")
+            
+    await update.effective_message.reply_text(text)
 
 
 async def delete_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
