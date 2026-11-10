@@ -225,3 +225,7 @@ app.add_handler(MessageHandler(filters.ALL, anti_spam))
 
 print("MyModeratorBot запущен!")
 app.run_polling()
+async def stats(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    cursor.execute('SELECT COUNT(*) FROM users')
+    count = cursor.fetchone()[0]
+    await update.effective_message.reply_text(f"Всего пользователей: {count}")
